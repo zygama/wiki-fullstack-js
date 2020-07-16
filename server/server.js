@@ -8,6 +8,7 @@ const routes = require('./routes');
 // ---------------------------------------------------------------------------------------------- //
 
 const port = process.env.PORT; // Port to launch server on
+const mongoUrl = 'mongodb://localhost:27017'; // Port to launch server on
 
 const app = express();
 
@@ -23,7 +24,7 @@ mongoose.set('useCreateIndex', true);
 mongoose.set('useFindAndModify', false);
 
 // Connect express to mongoose
-mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true })
+mongoose.connect(mongoUrl, { useNewUrlParser: true })
    .then(() => console.info('MongoDB connected to the app...'))
    .catch(err => console.info(err));
 app.set('mongoose', mongoose);
