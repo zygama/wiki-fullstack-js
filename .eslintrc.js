@@ -20,6 +20,8 @@ module.exports = {
   rules: {
     "comma-dangle": "off",
     "indent": ["error", 3],
-    "react/jsx-indent": "off"
+    "react/jsx-indent": "off",
+    "arrow-parens": "off",
+    "no-console": "off"
   },
 };

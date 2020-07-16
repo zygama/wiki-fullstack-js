@@ -1,10 +1,6 @@
-/* eslint-disable no-nested-ternary */
-const moment = require('moment');
 const { Router } = require('express');
-const EventModel = require('../../models/events');
+const ArticleModel = require('../../models/articles');
 
-const logger = require('../../utils/logger');
-const { establishmentFieldsToPopulate, getEvents } = require('../../utils/index');
 
 const routes = Router();
 
@@ -17,19 +13,10 @@ const routes = Router();
  */
 routes.get('/', async (req, res) => {
    try {
-      const {
-         query,
-         queryTotalPageDocuments,
-         queryTotalDocuments
-      } = await getEvents(req);
-      // Set the number of documents in collection inside the response Header
-      // and allow to expose this header in CORS
-      res.header('X-Total-Count', `${queryTotalPageDocuments}/${queryTotalDocuments}`);
-      res.header('Access-Control-Expose-Headers', 'X-Total-Count');
+      
       res.status(200).json(query);
    } catch (error) {
       console.error(error);
-      logger.error(error);
       res.status(500).send(error);
    }
 });
