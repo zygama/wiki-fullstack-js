@@ -1,3 +1,8 @@
 # Wiki: projet fullstack JS
 
-- npm i
+- Initilisation du projet :
+- Lancement du serveur :
+    - nodemon server.js
+
+- Initialisation de la base de données :
+    - localhost/3000/api/setup
