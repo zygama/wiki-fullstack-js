@@ -11,6 +11,6 @@ const CategorySchema = new Schema({
 
 CategorySchema.plugin(uniqueValidator);
 
-const Events = mongoose.model('events', CategorySchema);
+const Categories = mongoose.model('categories', CategorySchema);
 
-module.exports = Events;
+module.exports = Categories;

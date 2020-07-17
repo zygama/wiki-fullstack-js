@@ -19,10 +19,10 @@ const routes = Router();
 // });
 
 /**
-* @api {POST} /api/articles Post an event
+* @api {POST} /api/articles Create article
 * @apiName PostArticle
 * @apiGroup Articles
-* @apiDescription Post an article
+* @apiDescription create an article
 */
 routes.post('/', async (req, res) => {
    try {
@@ -63,30 +63,50 @@ routes.get('/categorie/:id', async (req, res) => {
          res.status(500).send(err);
       });
 });
-//
-// /**
-// * @api {PUT} /api/events/:id Update an event via his id
-// * @apiName UpdateEvent
-// * @apiGroup Events
-// * @apiDescription Update an event via his id
-// *
-// * @apiParam {ObjectId} id Event unique ID.
-// */
-// routes.patch('/:id', (req, res) => {
-//    const eventId = req.params.id;
-//    const newData = req.body;
-//
-//    // The new: true permits to return the updated data instead of old
-//    EventModel.findByIdAndUpdate(eventId, newData, { new: true }, (err, result) => {
-//       if (err) {
-//          logger.error(err);
-//          res.status(500).json(err);
-//       } else {
-//          logger.info(`Event ${eventId} patched with new data ${newData}`);
-//          res.status(200).json(result);
-//       }
-//    });
-// });
+
+/**
+* @api {GET} /api/articles/:id Get an article from his id
+* @apiName GetArticle
+* @apiGroup Articles
+* @apiDescription Get an article from his id
+*
+* @apiParam {ObjectId} id Article unique ID.
+*/
+routes.get('/:id', (req, res) => {
+   // get the article from the id
+   const articleId = req.params.id;
+   ArticleModel.findById(articleId, (err, result) => {
+      if (err) {
+         console.log(err);
+         res.status(500).json(err);
+      } else {
+         console.log(result);
+         res.status(200).json(result);
+      }
+   });
+});
+
+routes.post('/update', (req, res) => {
+   // get modified values (title, content, categorie, tags)
+   // get unmodified value (idArticleVersionned)
+   const updatedArticle = new ArticleModel({ ...req.body });
+   console.log(updatedArticle);
+   const idArticleVersionned = updatedArticle.idArticleVersionned.toString();
+
+   console.log(idArticleVersionned);
+   ArticleVersionnedModel.findById(idArticleVersionned, (err, result) => {
+      if (err) {
+         console.log(err);
+         res.status(500).json(err);
+      } else {
+         console.log(result);
+         result.history.push(updatedArticle.id);
+         result.save();
+         updatedArticle.save();
+         res.status(200).json('updated');
+      }
+   });
+});
 //
 // /**
 // * @api {DELETE} /api/events/:id Delete an event via his id

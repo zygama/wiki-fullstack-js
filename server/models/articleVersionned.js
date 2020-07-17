@@ -13,6 +13,6 @@ const ArticleVersionnedSchema = new Schema({
 
 ArticleVersionnedSchema.plugin(uniqueValidator);
 
-const Events = mongoose.model('articleVersionned', ArticleVersionnedSchema);
+const ArticleVersionned = mongoose.model('articleVersionned', ArticleVersionnedSchema);
 
-module.exports = Events;
+module.exports = ArticleVersionned;
