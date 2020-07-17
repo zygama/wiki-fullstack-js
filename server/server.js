@@ -2,7 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
-
 const routes = require('./routes');
 
 // ---------------------------------------------------------------------------------------------- //
@@ -11,28 +10,22 @@ const routes = require('./routes');
 const port = 3000; // Port to launch server on
 const mongoUrl = 'mongodb://localhost:27017/wiki';
 
-const app = express();
-
-// Enable CORS from all Origins: DANGEROUS -> TODO: enable only front admin and app
-app.use(cors());
-
-// Make Express use BodyParser with limit of 10mb (usefull when getting huge base64 images)
-app.use(bodyParser.json({ limit: '10mb', extended: true }));
-app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
-
 // Mongoose deprecation warning fixes
 mongoose.set('useCreateIndex', true);
 mongoose.set('useFindAndModify', false);
 
 // Connect express to mongoose
 mongoose.connect(mongoUrl, { useNewUrlParser: true })
-   .then(() => console.info('MongoDB connected to the app...'))
+   .then(() => {
+      console.info('MongoDB connected to the app...');
+      const app = express();
+      app.set('mongoose', mongoose);
+      app.use(cors());
+      //app.use(express.urlencoded({ extended: false }));
+      app.use(express.json({ type: 'application/json' }));
+      app.use('/api', routes);
+      app.listen(port, () => {
+         console.info(`App is listening on port: ${port}`);
+      });
+   })
    .catch(err => console.info(err));
-app.set('mongoose', mongoose);
-
-// Load routes
-app.use('/api', routes);
-// Launch server on ${port}
-app.listen(port, () => {
-   console.info(`App is listening on port: ${port}`);
-});

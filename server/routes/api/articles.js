@@ -1,6 +1,5 @@
 const { Router } = require('express');
 const ArticleModel = require('../../models/articles');
-
 const routes = Router();
 
 /**
@@ -26,11 +25,11 @@ const routes = Router();
 */
 routes.post('/', async (req, res) => {
    try {
-      console.log(req.body);
-      const newArticle = new ArticleModel({ ...req.body });
-      const savedArticle = await newArticle.save();
+      console.log(req);
+      // const newArticle = new ArticleModel({ ...req.body });
+      // const savedArticle = await newArticle.save();
 
-      res.status(201).json(savedArticle);
+      res.status(201).json(req.body);
    } catch (error) {
       console.log(error);
       res.status(500).send(error);
