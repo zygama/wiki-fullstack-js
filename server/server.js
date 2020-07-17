@@ -7,8 +7,9 @@ const routes = require('./routes');
 
 // ---------------------------------------------------------------------------------------------- //
 
-const port = process.env.PORT; // Port to launch server on
-const mongoUrl = 'mongodb://localhost:27017'; // Port to launch server on
+// const port = process.env.PORT; // Port to launch server on
+const port = 3000; // Port to launch server on
+const mongoUrl = 'mongodb://localhost:27017/wiki';
 
 const app = express();
 
@@ -31,7 +32,6 @@ app.set('mongoose', mongoose);
 
 // Load routes
 app.use('/api', routes);
-
 // Launch server on ${port}
 app.listen(port, () => {
    console.info(`App is listening on port: ${port}`);

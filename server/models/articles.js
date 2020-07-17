@@ -16,6 +16,6 @@ const ArticleSchema = new Schema({
 
 ArticleSchema.plugin(uniqueValidator);
 
-const Events = mongoose.model('events', ArticleSchema);
+const Articles = mongoose.model('articles', ArticleSchema);
 
-module.exports = Events;
+module.exports = Articles;
