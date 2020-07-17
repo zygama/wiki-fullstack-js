@@ -22,6 +22,7 @@ module.exports = {
     "indent": ["error", 3],
     "react/jsx-indent": "off",
     "arrow-parens": "off",
-    "no-console": "off"
+    "no-console": "off",
+    "linebreak-style": "off"
   },
 };

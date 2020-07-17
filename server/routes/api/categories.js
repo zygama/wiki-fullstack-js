@@ -1,43 +1,33 @@
 const { Router } = require('express');
-const ArticleModel = require('../../models/articles');
-const ArticleVersionnedModel = require('../../models/articleVersionned');
+const CategorieModel = require('../../models/categories');
 
 const routes = Router();
 
 /**
- * @api {GET} /api/events Get all events
+ * @api {GET} /api/events Get all categories
  * @apiName GetArticles
  * @apiGroup Articles
  * @apiDescription Get all articles
  */
-// routes.get('/', async (req, res) => {
-//    try {
-//       res.status(200).json(query);
-//    } catch (error) {
-//       console.error(error);
-//       res.status(500).send(error);
-//    }
-// });
+routes.get('/', async (req, res) => {
+   CategorieModel.find().then(categories => {
+      res.status(200).json(categories);
+   }).catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+   });
+});
 
 /**
-* @api {POST} /api/articles Create article
-* @apiName PostArticle
-* @apiGroup Articles
-* @apiDescription create an article
-*/
+ * @api {POST} /api/categories Create categorie
+ * @apiName PostCategorie
+ * @apiGroup Categories
+ * @apiDescription create a category
+ */
 routes.post('/', async (req, res) => {
    try {
-      const newArticle = new ArticleModel({ ...req.body });
-      await newArticle.save();
-
-      const newArticleVersionned = new ArticleVersionnedModel();
-      await newArticleVersionned.save();
-
-      await newArticle.updateOne({ idArticleVersionned: newArticleVersionned.id });
-      await newArticle.save();
-
-      await newArticleVersionned.updateOne({ history: [newArticle.id] });
-      await newArticleVersionned.save();
+      const newCategorie = new CategorieModel({ ...req.body });
+      await newCategorie.save();
 
       res.status(200).send('ok');
    } catch (error) {
@@ -47,56 +37,17 @@ routes.post('/', async (req, res) => {
 });
 
 /**
-* @api {GET} /api/events/:id Get articles from categorie id
-* @apiName GetArticlesFromCategorieId
-* @apiGroup Articles
-* @apiDescription Get an event via categorie id
-*
-* @apiParam {ObjectId} id Categorie unique ID.
-*/
-// routes.get('/categorie/:id', async (req, res) => {
-//
-//    ArticleModel.find({ categorie: req.params.id }, (err, articles) => {
-//       const finalArray = [];
-//       articles.forEach(article => {
-//          ArticleVersionnedModel.find({ _id: article.idArticleVersionned }, (error, articlesVersionned) => {
-//             if (error) {
-//                console.log(error);
-//                res.status(500).send(error);
-//             } else {
-//                articlesVersionned.forEach(articleVersionned => {
-//                   const articleVersionnedHistoryLength = articleVersionned.history.length;
-//                   if (article.id == articleVersionned.history[articleVersionnedHistoryLength - 1]) {
-//                      console.log(finalArray.isArray());
-//                      // finalArray.forEach(item => {
-//                      //    console.log('item', item);
-//                      //    // if (!item.idArticleVersionned === article.id) {
-//                      //    //    finalArray.push(article);
-//                      //    // }
-//                      // });
-//                      //console.log(finalArray);
-//                   }
-//                   res.status(200).json(finalArray);
-//                });
-//             }
-//          });
-//       });
-//       //res.status(200).json(finalArray);
-//    });
-// });
-
-/**
-* @api {GET} /api/articles/:id Get an article from his id
-* @apiName GetArticle
-* @apiGroup Articles
-* @apiDescription Get an article from his id
-*
-* @apiParam {ObjectId} id Article unique ID.
-*/
+ * @api {GET} /api/categories/:id Get a category by id
+ * @apiName GetCategory
+ * @apiGroup Category
+ * @apiDescription Get a category by id
+ *
+ * @apiParam {ObjectId} id Category unique ID.
+ */
 routes.get('/:id', (req, res) => {
    // get the article from the id
-   const articleId = req.params.id;
-   ArticleModel.findById(articleId, (err, result) => {
+   const categoryId = req.params.id;
+   CategorieModel.findById(categoryId, (err, result) => {
       if (err) {
          console.log(err);
          res.status(500).json(err);
@@ -107,50 +58,38 @@ routes.get('/:id', (req, res) => {
    });
 });
 
-routes.post('/update', (req, res) => {
-   // get modified values (title, content, categorie, tags)
-   // get unmodified value (idArticleVersionned)
-   const updatedArticle = new ArticleModel({ ...req.body });
-   console.log(updatedArticle);
-   const idArticleVersionned = updatedArticle.idArticleVersionned.toString();
-
-   console.log(idArticleVersionned);
-   ArticleVersionnedModel.findById(idArticleVersionned, (err, result) => {
-      if (err) {
-         console.log(err);
-         res.status(500).json(err);
-      } else {
-         console.log(result);
-         result.history.push(updatedArticle.id);
-         result.save();
-         updatedArticle.save();
-         res.status(200).json('updated');
-      }
-   });
+routes.put('/:id', async (req, res) => {
+   try {
+      const { id } = req.params;
+      await CategorieModel.updateOne({ _id: id }, { $set: { title: req.body.title } });
+      res.status(200).json('update ok');
+   } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+   }
 });
-//
-// /**
-// * @api {DELETE} /api/events/:id Delete an event via his id
-// * @apiName DeleteEvent
-// * @apiGroup Events
-// * @apiDescription Delete an event via his id
-// *
-// * @apiParam {ObjectId} id Event unique ID.
-// */
-// routes.delete('/:id', (req, res) => {
-//    const eventId = req.params.id;
-//
-//    EventModel.findById(eventId)
-//       .then(event => event.remove().then(() => {
-//          logger.info(`Event ${eventId} removed`);
-//          res.status(200).json({ success: true });
-//       }))
-//       .catch(err => {
-//          logger.error(err);
-//          res.status(500).send(err);
-//       });
-// });
-//
+
+/**
+* @api {DELETE} /api/categories/:id Delete a category by id
+* @apiName DeleteCategory
+* @apiGroup Categories
+* @apiDescription Delete a category by idvia his id
+*
+* @apiParam {ObjectId} id Category unique ID.
+*/
+routes.delete('/:id', (req, res) => {
+   const categoryId = req.params.id;
+
+   CategorieModel.findById(categoryId)
+      .then(event => event.remove().then(() => {
+         res.status(200).json({ success: true });
+      }))
+      .catch(err => {
+         console.log(err);
+         res.status(500).send(err);
+      });
+});
+
 // /**
 // * @api {GET} /api/events/:city/currently-happening Get events currently happening
 // * @apiName GetEventsCurrentlyHappening

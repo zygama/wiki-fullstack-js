@@ -7,7 +7,7 @@ const { ObjectId } = mongoose.Types;
 const ArticleSchema = new Schema({
    title: { type: String, required: true },
    content: { type: String, required: true },
-   categorie: { type: ObjectId, ref: 'categories' },
+   categorie: { type: ObjectId, required: true, ref: 'categories' },
    tags: [{ type: String }],
    idArticleVersionned: { type: ObjectId, ref: 'articleVersionned' }
 }, {
