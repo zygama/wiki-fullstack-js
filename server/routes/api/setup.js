@@ -103,7 +103,7 @@ routes.get('/', async (req, res) => {
             await politiqueArticleVersionned.updateOne({ history: [politiqueArticle.id] });
             await politiqueArticleVersionned.save();
 
-            res.status(201).json(informatiqueCategorie);
+            res.status(201).json('BASE OK');
          }
       });
    } catch (error) {

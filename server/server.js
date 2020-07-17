@@ -21,7 +21,7 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true })
       const app = express();
       app.set('mongoose', mongoose);
       app.use(cors());
-      //app.use(express.urlencoded({ extended: false }));
+      app.use(express.urlencoded({ extended: true }));
       app.use(express.json({ type: 'application/json' }));
       app.use('/api', routes);
       app.listen(port, () => {

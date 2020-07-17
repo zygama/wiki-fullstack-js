@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const ArticleModel = require('../../models/articles');
+const ArticleVersionnedModel = require('../../models/articleVersionned');
 const routes = Router();
 
 /**
@@ -25,36 +26,43 @@ const routes = Router();
 */
 routes.post('/', async (req, res) => {
    try {
-      console.log(req);
-      // const newArticle = new ArticleModel({ ...req.body });
-      // const savedArticle = await newArticle.save();
+      const newArticle = new ArticleModel({ ...req.body });
+      await newArticle.save();
 
-      res.status(201).json(req.body);
+      const newArticleVersionned = new ArticleVersionnedModel();
+      await newArticleVersionned.save();
+
+      await newArticle.updateOne({ idArticleVersionned: newArticleVersionned.id });
+      await newArticle.save();
+
+      await newArticleVersionned.updateOne({ history: [newArticle.id] });
+      await newArticleVersionned.save();
+
+      res.status(200).send('ok');
    } catch (error) {
       console.log(error);
       res.status(500).send(error);
    }
 });
-//
-// /**
-// * @api {GET} /api/events/:id Get an event via his id
-// * @apiName GetEventViaId
-// * @apiGroup Events
-// * @apiDescription Get an event via his id
-// *
-// * @apiParam {ObjectId} id Event unique ID.
-// */
-// routes.get('/:id', async (req, res) => {
-//    EventModel.findById(req.params.id)
-//       .populate('establishment', establishmentFieldsToPopulate)
-//       .then((event) => {
-//          res.status(200).json(event);
-//       })
-//       .catch(err => {
-//          logger.error(err);
-//          res.status(500).send(err);
-//       });
-// });
+
+/**
+* @api {GET} /api/events/:id Get articles from categorie id
+* @apiName GetArticlesFromCategorieId
+* @apiGroup Articles
+* @apiDescription Get an event via categorie id
+*
+* @apiParam {ObjectId} id Categorie unique ID.
+*/
+routes.get('/categorie/:id', async (req, res) => {
+   ArticleModel.find({ categorie: req.params.id })
+      .then((articles) => {
+         res.status(200).json(articles);
+      })
+      .catch(err => {
+         console.log(err);
+         res.status(500).send(err);
+      });
+});
 //
 // /**
 // * @api {PUT} /api/events/:id Update an event via his id
