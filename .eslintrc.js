@@ -23,6 +23,8 @@ module.exports = {
     "react/jsx-indent": "off",
     "arrow-parens": "off",
     "no-console": "off",
-    "linebreak-style": "off"
+    "linebreak-style": "off",
+    "no-plusplus": "off",
+    "no-underscore-dangle": ["error", { "allow": ["_id"] }]
   },
 };

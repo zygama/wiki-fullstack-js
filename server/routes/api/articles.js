@@ -135,29 +135,38 @@ routes.post('/update', (req, res) => {
 *
 * @apiParam {ObjectId} id Event unique ID.
 */
-routes.get('/tag/:id', async (req, res) => {
-   const tagName = req.params.id;
+routes.get('/tag/:tagName', async (req, res) => {
+   const { tagName } = req.params;
    const arrayLastArticles = [];
-   const arrayArticles = [];
-   ArticleVersionnedModel.find().then(articlesVersionned => {
-      articlesVersionned.forEach(articleVersionned => {
-         const { length } = articleVersionned.history;
-         arrayLastArticles.push(articleVersionned.history[length - 1]);
+   let arrayArticlesTagged = [];
+   const arrayArticlesResult = [];
+
+   try {
+      const allArticlesVersionned = await ArticleVersionnedModel.find();
+      console.log(allArticlesVersionned);
+      // Put all last articles inside "arrayLastArticles"
+      allArticlesVersionned.forEach((articleVersionned) => {
+         arrayLastArticles.push(articleVersionned.history[articleVersionned.history.length - 1].toString());
       });
-      arrayLastArticles.forEach(lastArticle => {
-         console.log(lastArticle);
-         ArticleModel.find({ _id: lastArticle }).then(article => {
-            if (article[0].tags.includes(tagName)) {
-               arrayArticles.push(article);
-            }
-            console.log(arrayArticles);
-            // res.status(200).json(arrayArticles);
-         });
+      console.log(arrayLastArticles);
+
+      // Search for articles with specified tag
+      arrayArticlesTagged = await ArticleModel.find({ tags: tagName });
+      console.log(arrayArticlesTagged);
+
+      // Check if articles getted with tag is a last article
+      arrayArticlesTagged.forEach(articleTagged => {
+         console.log(articleTagged._id);
+         if (arrayLastArticles.includes(articleTagged._id.toString())) {
+            arrayArticlesResult.push(articleTagged);
+         }
       });
-      // res.status(200).json(arrayArticles[0]);
-   }).catch(err => {
-      res.status(500).json(err);
-   });
+
+      res.status(200).json(arrayArticlesResult);
+   } catch (error) {
+      console.log(error);
+      res.status(500).json(error);
+   }
 });
 /**
 * @api {GET} /api/articles/title/:id Get articles from tag
@@ -171,6 +180,7 @@ routes.get('/title/:id', async (req, res) => {
    const title = req.params.id;
    const arrayLastArticles = [];
    const arrayArticles = [];
+
    ArticleVersionnedModel.find().then(articlesVersionned => {
       articlesVersionned.forEach(articleVersionned => {
          const { length } = articleVersionned.history;
