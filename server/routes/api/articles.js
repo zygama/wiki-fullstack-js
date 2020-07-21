@@ -143,20 +143,19 @@ routes.get('/tag/:tagName', async (req, res) => {
 
    try {
       const allArticlesVersionned = await ArticleVersionnedModel.find();
-      console.log(allArticlesVersionned);
+
       // Put all last articles inside "arrayLastArticles"
       allArticlesVersionned.forEach((articleVersionned) => {
-         arrayLastArticles.push(articleVersionned.history[articleVersionned.history.length - 1].toString());
+         arrayLastArticles.push(
+            articleVersionned.history[articleVersionned.history.length - 1].toString()
+         );
       });
-      console.log(arrayLastArticles);
 
       // Search for articles with specified tag
-      arrayArticlesTagged = await ArticleModel.find({ tags: tagName });
-      console.log(arrayArticlesTagged);
+      arrayArticlesTagged = await ArticleModel.find({ tags: { $regex: tagName, $options: 'i' } });
 
       // Check if articles getted with tag is a last article
       arrayArticlesTagged.forEach(articleTagged => {
-         console.log(articleTagged._id);
          if (arrayLastArticles.includes(articleTagged._id.toString())) {
             arrayArticlesResult.push(articleTagged);
          }
@@ -169,37 +168,44 @@ routes.get('/tag/:tagName', async (req, res) => {
    }
 });
 /**
-* @api {GET} /api/articles/title/:id Get articles from tag
+* @api {GET} /api/articles/title/:title Get articles from title
 * @apiName DeleteEvent
 * @apiGroup Events
 * @apiDescription Delete an event via his id
 *
 * @apiParam {ObjectId} id Event unique ID.
 */
-routes.get('/title/:id', async (req, res) => {
-   const title = req.params.id;
+routes.get('/title/:title', async (req, res) => {
+   const { title } = req.params;
    const arrayLastArticles = [];
-   const arrayArticles = [];
+   let arrayArticlesTitled = [];
+   const arrayArticlesResult = [];
 
-   ArticleVersionnedModel.find().then(articlesVersionned => {
-      articlesVersionned.forEach(articleVersionned => {
-         const { length } = articleVersionned.history;
-         arrayLastArticles.push(articleVersionned.history[length - 1]);
+   try {
+      const allArticlesVersionned = await ArticleVersionnedModel.find();
+
+      // Put all last articles inside "arrayLastArticles"
+      allArticlesVersionned.forEach((articleVersionned) => {
+         arrayLastArticles.push(
+            articleVersionned.history[articleVersionned.history.length - 1].toString()
+         );
       });
-      arrayLastArticles.forEach(lastArticle => {
-         console.log(lastArticle);
-         ArticleModel.find({ _id: lastArticle }).then(article => {
-            if (article[0].title === title) {
-               arrayArticles.push(article);
-            }
-            console.log(arrayArticles);
-            // res.status(200).json(arrayArticles);
-         });
+
+      // Search for articles with specified title
+      arrayArticlesTitled = await ArticleModel.find({ title: { $regex: title, $options: 'i' } });
+
+      // Check if articles getted with tag is a last article
+      arrayArticlesTitled.forEach(articleTitled => {
+         if (arrayLastArticles.includes(articleTitled._id.toString())) {
+            arrayArticlesResult.push(articleTitled);
+         }
       });
-      // res.status(200).json(arrayArticles[0]);
-   }).catch(err => {
-      res.status(500).json(err);
-   });
+
+      res.status(200).json(arrayArticlesResult);
+   } catch (error) {
+      console.log(error);
+      res.status(500).json(error);
+   }
 });
 
 routes.delete('/:id', (req, res) => {
