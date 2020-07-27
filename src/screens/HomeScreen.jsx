@@ -2,12 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { CircularProgress, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
-import {
-   BrowserRouter as Router, Switch, Route, Link
-} from 'react-router-dom';
 
 import CardArticleCategory from '../components/CardArticleCategory';
-import CategoryArticlesList from './CategoryArticlesList';
 import { backendUrl } from '../utils';
 
 const useStyles = makeStyles({

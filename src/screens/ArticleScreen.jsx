@@ -1,24 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import {
-   useHistory,
-   BrowserRouter as Router, Switch, Route, Link
-} from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import {
    CircularProgress,
-   Typography,
    Button,
-   Modal,
    Dialog,
    DialogTitle,
    DialogContent,
    DialogContentText,
-   DialogActions
+   DialogActions,
+   Chip
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 
-import CardArticleCategory from '../components/CardArticleCategory';
-import CategoryArticlesList from './CategoryArticlesList';
 import { backendUrl } from '../utils';
 
 const useStyles = makeStyles((theme) => ({
@@ -42,31 +36,8 @@ const useStyles = makeStyles((theme) => ({
    },
    articleTitle: {
       marginBottom: '30px',
-   },
-   paper: {
-      position: 'absolute',
-      width: 400,
-      backgroundColor: theme.palette.background.paper,
-      border: '2px solid #000',
-      boxShadow: theme.shadows[5],
-      padding: theme.spacing(2, 4, 3),
-   },
+   }
 }));
-
-function rand() {
-   return Math.round(Math.random() * 20) - 10;
-}
-
-function getModalStyle() {
-   const top = 50 + rand();
-   const left = 50 + rand();
-
-   return {
-      top: `${top}%`,
-      left: `${left}%`,
-      transform: `translate(-${top}%, -${left}%)`,
-   };
-}
 
 const ArticleScreen = (props) => {
    const history = useHistory();
@@ -74,7 +45,6 @@ const ArticleScreen = (props) => {
    const [article, setArticle] = useState({});
    const [loading, setLoading] = useState(true);
    const [open, setOpen] = React.useState(false);
-   const [modalStyle] = useState(getModalStyle);
    const { articleId } = props.match.params;
 
    useEffect(() => {
@@ -102,24 +72,31 @@ const ArticleScreen = (props) => {
       history.replace('/');
    };
 
-   if (loading) return <CircularProgress />;
+   if (loading) {
+      return (
+         <div className={classes.root}>
+            <CircularProgress />
+         </div>
+      );
+   }
    return (
       <div className={classes.root}>
          <div className={classes.buttons}>
             <Button
                onClick={() => {
-                  history.push(`/articles/${props.id}`);
+                  history.push(`/articles/edit/${articleId}`);
                }}
                size="small"
                color="primary"
             >
-           Modifier
+               Modifier
             </Button>
             <Button onClick={handleOpen} size="small" color="secondary">
-           Supprimer
+               Supprimer
             </Button>
          </div>
          <div className={classes.content}>
+            {article.tags.map(tag => <Chip style={{ marginRight: '5px', marginBottom: '15px' }} label={tag} />)}
             <h2 className={classes.articleTitle}>{article.title}</h2>
             <p>{article.content}</p>
          </div>
@@ -131,12 +108,11 @@ const ArticleScreen = (props) => {
             aria-describedby="alert-dialog-description"
          >
             <DialogTitle id="alert-dialog-title">
-               Voulez-vous vraiment supprimer l&apos;article ?
+           Voulez-vous vraiment supprimer l&apos;article ?
             </DialogTitle>
             <DialogContent>
                <DialogContentText id="alert-dialog-description">
-             Let Google help apps determine location. This means sending
-             anonymous location data to Google, even when no apps are running.
+                  Voulez-vous vraiment supprimer l&apos;article ?
                </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -148,20 +124,6 @@ const ArticleScreen = (props) => {
                </Button>
             </DialogActions>
          </Dialog>
-
-         {/* <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="simple-modal-title"
-            aria-describedby="simple-modal-description"
-         >
-            <div style={modalStyle} className={classes.paper}>
-               <h2 id="simple-modal-title">Text in a modal</h2>
-               <p id="simple-modal-description">
-             Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-               </p>
-            </div>
-         </Modal> */}
       </div>
    );
 };

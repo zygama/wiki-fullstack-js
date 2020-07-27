@@ -6,6 +6,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import HomeScreen from './screens/HomeScreen';
 import CategoryArticlesList from './screens/CategoryArticlesList';
 import ArticleScreen from './screens/ArticleScreen';
+import EditArticleScreen from './screens/EditArticleScreen';
 
 const App = () => (
    <BrowserRouter>
@@ -15,10 +16,8 @@ const App = () => (
             path="/articles/by-category/:categoryId"
             component={CategoryArticlesList}
          />
-         <Route
-            path="/articles/:articleId"
-            component={ArticleScreen}
-         />
+         <Route path="/articles/edit/:articleId" component={EditArticleScreen} />
+         <Route path="/articles/:articleId" component={ArticleScreen} />
       </Switch>
    </BrowserRouter>
 );
