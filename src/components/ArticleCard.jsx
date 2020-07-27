@@ -6,7 +6,7 @@ import {
    CardContent,
    Typography,
    CardActions,
-   Button
+   Button,
 } from '@material-ui/core';
 
 const useStyles = makeStyles({
@@ -21,31 +21,29 @@ const useStyles = makeStyles({
    },
 });
 
-const CardArticleCategory = (props) => {
+const ArticleCard = (props) => {
    const history = useHistory();
    const classes = useStyles();
-
-   const handleOnClickSeeArticles = () => {
-      history.push({
-         pathname: `/articles/by-category/${props.id}`,
-         categoryName: props.categoryName
-      });
-   };
 
    return (
       <Card className={classes.root}>
          <CardContent>
             <Typography variant="h5" component="h2">
-               {props.categoryName}
+               {props.title}
             </Typography>
          </CardContent>
          <CardActions>
-            <Button onClick={handleOnClickSeeArticles} size="small">
-               Voir les articles
+            <Button
+               onClick={() => {
+                  history.push(`/articles/${props.id}`);
+               }}
+               size="small"
+            >
+               Voir l&apos;article
             </Button>
          </CardActions>
       </Card>
    );
 };
 
-export default CardArticleCategory;
+export default ArticleCard;

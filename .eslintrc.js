@@ -25,6 +25,7 @@ module.exports = {
     "no-console": "off",
     "linebreak-style": "off",
     "no-plusplus": "off",
-    "no-underscore-dangle": ["error", { "allow": ["_id"] }]
+    "no-underscore-dangle": ["error", { "allow": ["_id"] }],
+    "react/jsx-indent-props": "off"
   },
 };

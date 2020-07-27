@@ -85,34 +85,6 @@ routes.get('/categorie/:id', async (req, res) => {
       console.log(error);
       res.status(500).json(error);
    }
-
-   ArticleModel.find({ categorie: req.params.id }, (err, articles) => {
-      const finalArray = [];
-      articles.forEach(article => {
-         ArticleVersionnedModel.find({ _id: article.idArticleVersionned }, (error, articlesVersionned) => {
-            if (error) {
-               console.log(error);
-               res.status(500).send(error);
-            } else {
-               articlesVersionned.forEach(articleVersionned => {
-                  const articleVersionnedHistoryLength = articleVersionned.history.length;
-                  if (article.id == articleVersionned.history[articleVersionnedHistoryLength - 1]) {
-                     console.log(finalArray.isArray());
-                     // finalArray.forEach(item => {
-                     //    console.log('item', item);
-                     //    // if (!item.idArticleVersionned === article.id) {
-                     //    //    finalArray.push(article);
-                     //    // }
-                     // });
-                     //console.log(finalArray);
-                  }
-                  res.status(200).json(finalArray);
-               });
-            }
-         });
-      });
-      //res.status(200).json(finalArray);
-   });
 });
 
 /**

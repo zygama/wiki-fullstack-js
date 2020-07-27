@@ -2,8 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { CircularProgress, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
+import {
+   BrowserRouter as Router, Switch, Route, Link
+} from 'react-router-dom';
 
 import CardArticleCategory from '../components/CardArticleCategory';
+import CategoryArticlesList from './CategoryArticlesList';
 import { backendUrl } from '../utils';
 
 const useStyles = makeStyles({
@@ -38,20 +42,27 @@ const HomeScreen = () => {
       getArticlesCategories();
    }, []);
 
-   if (loading) return <CircularProgress />;
+   if (loading) {
+      return (
+         <div className={classes.root}>
+            <CircularProgress />
+         </div>
+      );
+   }
    return (
       <div className={classes.root}>
          <Typography variant="h2" component="h2" gutterBottom>
-            Les catégories
+         Les catégories
          </Typography>
          <div className={classes.categoryContainer}>
-            {
-               articlesCategories.map((category) => (
-                  <div key={category._id}>
-                     <CardArticleCategory categoryName={category.title} />
-                  </div>
-               ))
-            }
+            {articlesCategories.map((category) => (
+               <div key={category._id}>
+                  <CardArticleCategory
+                     categoryName={category.title}
+                     id={category._id}
+                  />
+               </div>
+            ))}
          </div>
       </div>
    );
