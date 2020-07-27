@@ -7,13 +7,13 @@
   * Installer yarn, mongodb et nodejs sur votre machine si vous ne les avez pas déjà.
 * Initialisation du projet : 
   * Lancez un terminal à la racine du projet.
-    * Exécuter mongo.exe sur votre machine à l'emplacement suivant : ` "C:\Program Files\MongoDB\Server\4.2\bin`" 
-    * A la racine de votre projet, lancer yarn install
+    * Exécuter `mongo.exe` sur votre machine à l'emplacement suivant : ` "C:\Program Files\MongoDB\Server\4.2\bin`" 
+    * A la racine de votre projet, lancer `yarn install`
 * Lancement du serveur à la racine du projet
-  * nodemon server/server.js
+  * `nodemon server/server.js`
 * Lancement de l'application à la racine du projet
-  * npm start
+  * `npm start`
 * Initialisation de la base de données :
-  * localhost/3000/api/setup
+  * *localhost/3000/api/setup*
 * Accueil de l'application
-  * localhost/3001
+  * *localhost/3001*
