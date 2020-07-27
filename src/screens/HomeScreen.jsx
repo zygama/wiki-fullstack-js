@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 
 import CardArticleCategory from '../components/CardArticleCategory';
+import SearchBar from '../components/SearchBar';
 import { backendUrl } from '../utils';
 
 const useStyles = makeStyles({
@@ -47,6 +48,7 @@ const HomeScreen = () => {
    }
    return (
       <div className={classes.root}>
+         <SearchBar />
          <Typography variant="h2" component="h2" gutterBottom>
          Les catégories
          </Typography>

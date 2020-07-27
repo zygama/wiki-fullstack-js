@@ -42,25 +42,33 @@ const SearchBar = () => {
    };
 
    return (
-      <div style={{ display: 'flex', flexDirection: 'row' }}>
+      <div style={{
+         display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginBottom: '30px'
+      }}
+      >
          <TextField
+            style={{ width: '30vw' }}
             id="filled-basic"
             label="Recherche"
             value={searchInput}
-            fullWidth
             onChange={(event) => setSearchInput(event.target.value)}
          />
-         <RadioGroup
-            row
-            aria-label="gender"
-            name="gender1"
-            value={searchMode}
-            onChange={(event) => setSearchMode(event.target.value)}
-         >
-            <FormControlLabel value="tag" control={<Radio />} label="Tag" />
-            <FormControlLabel value="titre" control={<Radio />} label="Titre" />
-         </RadioGroup>
-         <Button color="primary" onClick={handleSearch}>Rechercher</Button>
+         <FormControl component="fieldset">
+            <RadioGroup
+               row
+               aria-label="gender"
+               name="gender1"
+               value={searchMode}
+               onChange={(event) => setSearchMode(event.target.value)}
+            >
+               <FormControlLabel value="tag" control={<Radio />} label="Tag" />
+               <FormControlLabel value="titre" control={<Radio />} label="Titre" />
+            </RadioGroup>
+         </FormControl>
+
+         <Button color="primary" onClick={handleSearch}>
+         Rechercher
+         </Button>
       </div>
    );
 };

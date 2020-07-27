@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {
    CircularProgress,
-   Typography,
-   Button
+   Typography
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-   useHistory
-} from 'react-router-dom';
 import axios from 'axios';
 
 import ArticleCard from '../components/ArticleCard';
@@ -25,9 +21,6 @@ const useStyles = makeStyles({
       display: 'grid',
       gridTemplateColumns: '1fr 1fr 1fr',
       gridGap: '20px 20px',
-   },
-   inputs: {
-      width: '35vw'
    }
 });
 

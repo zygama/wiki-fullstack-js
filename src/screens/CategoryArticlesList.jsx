@@ -33,7 +33,8 @@ const useStyles = makeStyles({
       gridGap: '20px 20px',
    },
    inputs: {
-      width: '35vw'
+      width: '35vw',
+      marginBottom: '30px'
    }
 });
 
@@ -41,16 +42,22 @@ const CategoryArticlesList = (props) => {
    const history = useHistory();
    const classes = useStyles();
    const [articles, setArticles] = useState([]);
+   const [categoryName, setCategoryName] = useState('');
    const [loading, setLoading] = useState(true);
    const [open, setOpen] = React.useState(false);
-   const [categories, setCategories] = useState([]);
    const { categoryId } = props.match.params;
    const [newArticleTitle, setNewArticleTitle] = React.useState('');
    const [newArticleContent, setNewArticleContent] = React.useState('');
+   const [newArticleTags, setNewArticleTags] = React.useState('');
 
    useEffect(() => {
       // Fill articles state
       const loadArticlesForCategory = async () => {
+         const category = await axios.get(
+            `${backendUrl}/categories/${categoryId}`
+         );
+         setCategoryName(category.data.title);
+
          let articlesByCategory = await axios.get(
             `${backendUrl}/articles/categorie/${categoryId}`
          );
@@ -58,7 +65,6 @@ const CategoryArticlesList = (props) => {
          const allCategories = await axios.get(`${backendUrl}/categories`);
          console.log(allCategories);
 
-         setCategories(allCategories.data);
          setArticles(articlesByCategory);
          setLoading(false);
       };
@@ -80,7 +86,7 @@ const CategoryArticlesList = (props) => {
          title: newArticleTitle,
          content: newArticleContent,
          categorie: categoryId,
-         tags: []
+         tags: newArticleTags.split(',')
       });
       handleClose();
       history.go();
@@ -97,7 +103,7 @@ const CategoryArticlesList = (props) => {
       <div className={classes.root}>
          <SearchBar />
          <Typography variant="h2" component="h2" gutterBottom>
-            {`Les articles de la catégorie ${props.location.categoryName}`}
+            {`Les articles de la catégorie ${categoryName}`}
          </Typography>
          <Button onClick={handleOpen} size="small" color="primary">
          Créer un article
@@ -142,6 +148,18 @@ const CategoryArticlesList = (props) => {
                            fullWidth
                            value={newArticleContent}
                            onChange={(event) => setNewArticleContent(event.target.value)}
+                        />
+                     </div>
+                     <div className={classes.inputs}>
+                        <TextField
+                           required
+                           id="filled-required"
+                           label="Tags"
+                           variant="filled"
+                           fullWidth
+                           value={newArticleTags}
+                           onChange={(event) => setNewArticleTags(event.target.value)}
+                           helperText="Séparé par des virgules"
                         />
                      </div>
                   </form>
