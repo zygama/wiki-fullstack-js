@@ -4,21 +4,12 @@ import {
 } from 'react-router-dom';
 import {
    CircularProgress,
-   Typography,
    Button,
-   Modal,
-   Dialog,
-   DialogTitle,
-   DialogContent,
-   DialogContentText,
-   DialogActions,
    TextField,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 
-import CardArticleCategory from '../components/CardArticleCategory';
-import CategoryArticlesList from './CategoryArticlesList';
 import { backendUrl } from '../utils';
 
 const useStyles = makeStyles({
@@ -53,6 +44,8 @@ const ArticleScreen = (props) => {
    const [articleTags, setArticleTags] = useState({});
    const [articleTitle, setArticleTitle] = useState('');
    const [articleContent, setArticleContent] = useState('');
+   const [articleVersions, setArticleVersions] = useState([]);
+   const [versionArticle, setVersionArticle] = useState('');
    const [loading, setLoading] = useState(true);
    const { articleId } = props.match.params;
 
@@ -125,12 +118,27 @@ const ArticleScreen = (props) => {
                   helperText="Séparé par des virgules"
                />
             </div>
+            {/* <Select
+               labelId="demo-simple-select-label"
+               id="demo-simple-select"
+               value={versionArticle}
+               onChange={onClickVersionArticle}
+            >
+               {articleVersions.map((version, index) => {
+                  if (index === articleVersions.length) {
+                     return (
+                        <MenuItem value={version}>Actuelle</MenuItem>
+                     );
+                  }
+                  <MenuItem value={version}>{`v${index}`}</MenuItem>;
+               })}
+            </Select> */}
             <div>
                <Button onClick={handleCancel} color="primary">
-                  Annuler
+             Annuler
                </Button>
                <Button onClick={handleUpdate} color="primary" autoFocus>
-                  Valider
+             Valider
                </Button>
             </div>
          </form>
