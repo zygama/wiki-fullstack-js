@@ -7,6 +7,7 @@ import HomeScreen from './screens/HomeScreen';
 import CategoryArticlesList from './screens/CategoryArticlesList';
 import ArticleScreen from './screens/ArticleScreen';
 import EditArticleScreen from './screens/EditArticleScreen';
+import ResultSearchScreen from './screens/ResultSearchScreen';
 
 const App = () => (
    <BrowserRouter>
@@ -17,6 +18,10 @@ const App = () => (
             component={CategoryArticlesList}
          />
          <Route path="/articles/edit/:articleId" component={EditArticleScreen} />
+         <Route
+            path="/articles/search/:searchInput"
+            component={ResultSearchScreen}
+         />
          <Route path="/articles/:articleId" component={ArticleScreen} />
       </Switch>
    </BrowserRouter>

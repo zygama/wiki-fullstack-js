@@ -17,6 +17,7 @@ import {
 import axios from 'axios';
 
 import ArticleCard from '../components/ArticleCard';
+import SearchBar from '../components/SearchBar';
 import { backendUrl } from '../utils';
 
 const useStyles = makeStyles({
@@ -82,12 +83,7 @@ const CategoryArticlesList = (props) => {
          tags: []
       });
       handleClose();
-      // setLoading(false);
       history.go();
-      // history.push({
-      //    pathname: `/articles/by-category/${categoryId}`,
-      //    categoryName: props.location.categoryName,
-      // });
    };
 
    if (loading) {
@@ -99,6 +95,7 @@ const CategoryArticlesList = (props) => {
    }
    return (
       <div className={classes.root}>
+         <SearchBar />
          <Typography variant="h2" component="h2" gutterBottom>
             {`Les articles de la catégorie ${props.location.categoryName}`}
          </Typography>
@@ -112,7 +109,6 @@ const CategoryArticlesList = (props) => {
                </div>
             ))}
          </div>
-
          <div>
             <Dialog open={open}>
                <DialogTitle id="alert-dialog-title">Créer un article</DialogTitle>
@@ -152,10 +148,10 @@ const CategoryArticlesList = (props) => {
                </DialogContent>
                <DialogActions>
                   <Button onClick={onCreateArticle} color="primary" type="submit">
-                     Créer
+               Créer
                   </Button>
                   <Button onClick={handleClose} color="primary" autoFocus>
-                     Annuler
+               Annuler
                   </Button>
                </DialogActions>
             </Dialog>
